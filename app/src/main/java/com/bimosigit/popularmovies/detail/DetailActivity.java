@@ -41,27 +41,31 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initUI(Movie movie) {
-        String ratingText = "Rating : " + movie.getVote_average() + "/10";
-        String releaseText = "Release on " + movie.getRelease_date();
+        String ratingText = "Rating : " + movie.getVoteAverage() + "/10";
+        String releaseText = "Release on " + movie.getReleaseDate();
 
-        titleTextView.setText(movie.getOriginal_title());
+        titleTextView.setText(movie.getOriginalTitle());
         ratingTextView.setText(ratingText);
         overviewTextView.setText(movie.getOverview());
         releaseTextView.setText(releaseText);
 
-        Uri uri = Uri.parse("http://image.tmdb.org/t/p/w185/" + movie.getPoster_path());
+        Uri uri = Uri.parse("http://image.tmdb.org/t/p/w185/" + movie.getPosterPath());
         Picasso.with(this).load(uri).into(posterImageView);
     }
 
     private Movie getMovieFromIntent() {
-        Intent intent = getIntent();
+
         Movie movie = new Movie();
-        movie.setId(intent.getIntExtra(Movie.MOVIE_ID, 0));
-        movie.setOriginal_title(intent.getStringExtra(Movie.MOVIE_ORIGINAL_TITLE));
-        movie.setVote_average(intent.getDoubleExtra(Movie.MOVIE_VOTE_AVERAGE, 0));
-        movie.setRelease_date(intent.getStringExtra(Movie.MOVIE_RELEASE_DATE));
-        movie.setPoster_path(intent.getStringExtra(Movie.MOVIE_POSTER_PATH));
-        movie.setOverview(intent.getStringExtra(Movie.MOVIE_OVERVIEW));
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            movie.setMovieID(intent.getIntExtra(Movie.MOVIE_ID, 0));
+            movie.setOriginalTitle(intent.getStringExtra(Movie.MOVIE_ORIGINAL_TITLE));
+            movie.setVoteAverage(intent.getDoubleExtra(Movie.MOVIE_VOTE_AVERAGE, 0));
+            movie.setReleaseDate(intent.getStringExtra(Movie.MOVIE_RELEASE_DATE));
+            movie.setPosterPath(intent.getStringExtra(Movie.MOVIE_POSTER_PATH));
+            movie.setOverview(intent.getStringExtra(Movie.MOVIE_OVERVIEW));
+        }
         return movie;
     }
 

@@ -97,12 +97,12 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     @Override
     public void showMovieDetailsUi(Movie movie) {
         Intent intent = new Intent(getContext(), DetailActivity.class);
-        intent.putExtra(Movie.MOVIE_ID, movie.getId());
-        intent.putExtra(Movie.MOVIE_ORIGINAL_TITLE, movie.getOriginal_title());
+        intent.putExtra(Movie.MOVIE_ID, movie.getMovieID());
+        intent.putExtra(Movie.MOVIE_ORIGINAL_TITLE, movie.getOriginalTitle());
         intent.putExtra(Movie.MOVIE_OVERVIEW, movie.getOverview());
-        intent.putExtra(Movie.MOVIE_POSTER_PATH, movie.getPoster_path());
-        intent.putExtra(Movie.MOVIE_RELEASE_DATE, movie.getRelease_date());
-        intent.putExtra(Movie.MOVIE_VOTE_AVERAGE, movie.getVote_average());
+        intent.putExtra(Movie.MOVIE_POSTER_PATH, movie.getPosterPath());
+        intent.putExtra(Movie.MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        intent.putExtra(Movie.MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
         startActivity(intent);
     }
 

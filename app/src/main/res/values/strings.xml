@@ -3,4 +3,5 @@
     <string name="show_top_rated">Show Top Rated</string>
     <string name="show_popular">Show Popular</string>
     <string name="cannot_connect_server">Oops, Sorry! We can\'t connect to server right now</string>
+    <string name="movie_poster">Movie Poster</string>
 </resources>

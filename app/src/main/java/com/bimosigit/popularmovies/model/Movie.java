@@ -5,18 +5,18 @@ package com.bimosigit.popularmovies.model;
  */
 
 public class Movie {
-    private Integer id;
-    private Integer vote_count;
+    private Integer movieID;
+    private Integer voteCount;
     private Boolean video;
-    private Double vote_average;
+    private Double voteAverage;
     private String title;
     private Double popularity;
-    private String poster_path;
-    private String original_language;
-    private String original_title;
-    private String backdrop_path;
+    private String posterPath;
+    private String originalLanguage;
+    private String originalTitle;
+    private String backdropPath;
     private String overview;
-    private String release_date;
+    private String releaseDate;
 
     public static final String MOVIE_ID = "id";
     public static final String MOVIE_VOTE_COUNT = "vote_count";
@@ -30,20 +30,20 @@ public class Movie {
     public Movie() {
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getMovieID() {
+        return movieID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setMovieID(Integer movieID) {
+        this.movieID = movieID;
     }
 
-    public Integer getVote_count() {
-        return vote_count;
+    public Integer getVoteCount() {
+        return voteCount;
     }
 
-    public void setVote_count(Integer vote_count) {
-        this.vote_count = vote_count;
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 
     public Boolean getVideo() {
@@ -54,12 +54,12 @@ public class Movie {
         this.video = video;
     }
 
-    public Double getVote_average() {
-        return vote_average;
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setVote_average(Double vote_average) {
-        this.vote_average = vote_average;
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getTitle() {
@@ -78,36 +78,36 @@ public class Movie {
         this.popularity = popularity;
     }
 
-    public String getPoster_path() {
-        return poster_path;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
-    public String getOriginal_language() {
-        return original_language;
+    public String getOriginalLanguage() {
+        return originalLanguage;
     }
 
-    public void setOriginal_language(String original_language) {
-        this.original_language = original_language;
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
-    public String getOriginal_title() {
-        return original_title;
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
-    public void setOriginal_title(String original_title) {
-        this.original_title = original_title;
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
     }
 
-    public String getBackdrop_path() {
-        return backdrop_path;
+    public String getBackdropPath() {
+        return backdropPath;
     }
 
-    public void setBackdrop_path(String backdrop_path) {
-        this.backdrop_path = backdrop_path;
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
     public String getOverview() {
@@ -118,11 +118,11 @@ public class Movie {
         this.overview = overview;
     }
 
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

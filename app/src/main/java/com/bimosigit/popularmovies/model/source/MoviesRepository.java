@@ -72,12 +72,12 @@ public class MoviesRepository implements MoviesDataSource {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject movieObject = jsonArray.getJSONObject(i);
                         Movie movie = new Movie();
-                        movie.setId(movieObject.getInt(Movie.MOVIE_ID));
-                        movie.setOriginal_title(movieObject.getString(Movie.MOVIE_ORIGINAL_TITLE));
+                        movie.setMovieID(movieObject.getInt(Movie.MOVIE_ID));
+                        movie.setOriginalTitle(movieObject.getString(Movie.MOVIE_ORIGINAL_TITLE));
                         movie.setOverview(movieObject.getString(Movie.MOVIE_OVERVIEW));
-                        movie.setPoster_path(movieObject.getString(Movie.MOVIE_POSTER_PATH));
-                        movie.setRelease_date(movieObject.getString(Movie.MOVIE_RELEASE_DATE));
-                        movie.setVote_average(movieObject.getDouble(Movie.MOVIE_VOTE_AVERAGE));
+                        movie.setPosterPath(movieObject.getString(Movie.MOVIE_POSTER_PATH));
+                        movie.setReleaseDate(movieObject.getString(Movie.MOVIE_RELEASE_DATE));
+                        movie.setVoteAverage(movieObject.getDouble(Movie.MOVIE_VOTE_AVERAGE));
 
                         movies.add(movie);
                     }
