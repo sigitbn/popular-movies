@@ -3,6 +3,7 @@ package com.bimosigit.popularmovies.model.source;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.bimosigit.popularmovies.main.MovieFilterType;
 import com.bimosigit.popularmovies.model.Movie;
 import com.bimosigit.popularmovies.utilities.NetworkUtils;
 
@@ -27,10 +28,22 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
-    public void fetchMovies(String query, @NonNull LoadMoviesCallback callback) {
+    public void fetchMovies(MovieFilterType filterType, @NonNull LoadMoviesCallback callback) {
         mCallBack = callback;
+        String query = getQuery(filterType);
         URL moviesURL = NetworkUtils.buildURI(query);
         new MoviesQueryTask().execute(moviesURL);
+    }
+
+    private String getQuery(MovieFilterType filterType) {
+        switch (filterType) {
+            case POPULAR_MOVIE:
+                return "popular";
+            case TOP_RATED:
+                return "top_rated";
+            default:
+                return "top_rated";
+        }
     }
 
     private class MoviesQueryTask extends AsyncTask<URL, Void, String> {

@@ -2,6 +2,7 @@ package com.bimosigit.popularmovies.model.source;
 
 import android.support.annotation.NonNull;
 
+import com.bimosigit.popularmovies.main.MovieFilterType;
 import com.bimosigit.popularmovies.model.Movie;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface MoviesDataSource {
         void onDataNotAvailable();
     }
 
-    void fetchMovies(String query, @NonNull LoadMoviesCallback callback);
+    void fetchMovies(MovieFilterType filterType, @NonNull LoadMoviesCallback callback);
 }

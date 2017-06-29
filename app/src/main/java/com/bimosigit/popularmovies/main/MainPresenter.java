@@ -14,27 +14,26 @@ public class MainPresenter implements MainContract.Presenter {
 
 
     private final MainContract.View mMoviesView;
-    private final String mQuery;
     private MoviesRepository mMoviesRepository;
+    private MovieFilterType mCurrentFiltering = MovieFilterType.TOP_RATED;
 
-    public MainPresenter(MainFragment mainFragment, String query, MoviesRepository moviesRepository) {
+    public MainPresenter(MainFragment mainFragment, MoviesRepository moviesRepository) {
 
         mMoviesRepository = moviesRepository;
         mMoviesView = mainFragment;
-        mQuery = query;
         mMoviesView.setPresenter(this);
     }
 
     @Override
     public void start() {
-        loadMovies(mQuery);
+        loadMovies();
     }
 
     @Override
-    public void loadMovies(String query) {
+    public void loadMovies() {
         mMoviesView.setLoadingIndicator(true);
 
-        mMoviesRepository.fetchMovies(query, new MoviesDataSource.LoadMoviesCallback() {
+        mMoviesRepository.fetchMovies(mCurrentFiltering, new MoviesDataSource.LoadMoviesCallback() {
             @Override
             public void onMoviesLoaded(List<Movie> movies) {
                 mMoviesView.showMovies(movies);
@@ -45,5 +44,15 @@ public class MainPresenter implements MainContract.Presenter {
                 mMoviesView.showLoadingMoviesError();
             }
         });
+    }
+
+    @Override
+    public void setFiltering(MovieFilterType filterType) {
+        mCurrentFiltering = filterType;
+    }
+
+    @Override
+    public MovieFilterType getFiltering() {
+        return mCurrentFiltering;
     }
 }

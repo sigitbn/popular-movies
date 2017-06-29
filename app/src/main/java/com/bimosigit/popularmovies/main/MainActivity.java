@@ -2,25 +2,15 @@ package com.bimosigit.popularmovies.main;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.widget.ProgressBar;
 
 import com.bimosigit.popularmovies.R;
-import com.bimosigit.popularmovies.adapter.MovieAdapter;
-import com.bimosigit.popularmovies.model.Movie;
 import com.bimosigit.popularmovies.model.source.MoviesRepository;
 import com.bimosigit.popularmovies.utilities.ActivityUtils;
 
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity  {
-
-    private RecyclerView mMoviesList;
-    private MovieAdapter mAdapter;
-    private ProgressBar mProgressBar;
-    private ArrayList<Movie> mMovies;
+    private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
     private MainPresenter mPresenter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +21,19 @@ public class MainActivity extends AppCompatActivity  {
         if (mainFragment == null) {
             mainFragment = MainFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mainFragment, R.id.content_frame);
-
         }
 
         MoviesRepository moviesRepository = new MoviesRepository();
-        mPresenter = new MainPresenter(mainFragment, "top_rated", moviesRepository);
-
+        mPresenter = new MainPresenter(mainFragment, moviesRepository);
+        if (savedInstanceState != null) {
+            MovieFilterType currentFilterType = (MovieFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
+            mPresenter.setFiltering(currentFilterType);
+        }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(CURRENT_FILTERING_KEY, mPresenter.getFiltering());
+        super.onSaveInstanceState(outState);
+    }
 }

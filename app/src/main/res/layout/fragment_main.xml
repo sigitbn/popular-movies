@@ -16,4 +16,27 @@
         android:layout_gravity="center"
         android:visibility="invisible" />
 
+    <LinearLayout
+        android:id="@+id/no_movies_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_movies_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_movie_black_48dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/cannot_connect_server" />
+
+    </LinearLayout>
+
 </FrameLayout>

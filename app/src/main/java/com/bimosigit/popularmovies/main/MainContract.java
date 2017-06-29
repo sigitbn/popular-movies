@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public interface MainContract {
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
 
         void setLoadingIndicator(boolean active);
 
@@ -22,7 +22,11 @@ public interface MainContract {
         void showLoadingMoviesError();
     }
 
-    interface Presenter extends BasePresenter{
-        void loadMovies(String query);
+    interface Presenter extends BasePresenter {
+        void loadMovies();
+
+        void setFiltering(MovieFilterType filterType);
+
+        MovieFilterType getFiltering();
     }
 }

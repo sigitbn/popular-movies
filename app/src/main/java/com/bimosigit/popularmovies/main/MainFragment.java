@@ -1,6 +1,7 @@
 package com.bimosigit.popularmovies.main;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -108,7 +109,10 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     @Override
     public void showLoadingMoviesError() {
         setLoadingIndicator(false);
-        Toast.makeText(getContext(), "Oops, Sorry! We can't connect to server right now", Toast.LENGTH_SHORT).show();
+        Activity activity = getActivity();
+        if (activity != null) {
+            Toast.makeText(activity, R.string.cannot_connect_server, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -126,12 +130,13 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.top_rated:
-                mPresenter.loadMovies("top_rated");
+                mPresenter.setFiltering(MovieFilterType.TOP_RATED);
                 break;
             case R.id.popular:
-                mPresenter.loadMovies("popular");
+                mPresenter.setFiltering(MovieFilterType.POPULAR_MOVIE);
                 break;
         }
+        mPresenter.loadMovies();
         return super.onOptionsItemSelected(item);
     }
 }
