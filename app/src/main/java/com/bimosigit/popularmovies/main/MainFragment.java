@@ -25,15 +25,23 @@ import com.bimosigit.popularmovies.model.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment implements MainContract.View, MovieAdapter.ListItemClickListener {
 
 
+    @BindView(R.id.rv_movies)
+    RecyclerView mMoviesList;
+    @BindView(R.id.pb_loading_indicator)
+    ProgressBar mProgressBar;
+
+    Unbinder unbinder;
     private MainContract.Presenter mPresenter;
-    private RecyclerView mMoviesList;
-    private ProgressBar mProgressBar;
     private ArrayList<Movie> mMovies;
     private MovieAdapter mAdapter;
 
@@ -57,14 +65,13 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
         setHasOptionsMenu(true);
-        mMoviesList = (RecyclerView) view.findViewById(R.id.rv_movies);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         mMoviesList.setLayoutManager(gridLayoutManager);
         mMoviesList.setHasFixedSize(true);
-
         mMoviesList.setAdapter(mAdapter);
 
         return view;
@@ -138,5 +145,11 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
         }
         mPresenter.loadMovies();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

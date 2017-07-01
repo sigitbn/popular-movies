@@ -4,4 +4,6 @@
     <string name="show_popular">Show Popular</string>
     <string name="cannot_connect_server">Oops, Sorry! We can\'t connect to server right now</string>
     <string name="movie_poster">Movie Poster</string>
+    <string name="release_on">Release on</string>
+    <string name="rating">Rating :</string>
 </resources>
