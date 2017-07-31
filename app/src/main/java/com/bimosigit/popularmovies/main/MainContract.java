@@ -13,8 +13,6 @@ import java.util.List;
 public interface MainContract {
     interface View extends BaseView<Presenter> {
 
-        void setLoadingIndicator(boolean active);
-
         void showMovies(List<Movie> movies);
 
         void showMovieDetailsUi(Movie movie);

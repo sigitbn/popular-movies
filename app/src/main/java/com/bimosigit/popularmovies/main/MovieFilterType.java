@@ -8,5 +8,7 @@ public enum MovieFilterType {
 
     POPULAR_MOVIE,
 
-    TOP_RATED
+    TOP_RATED,
+
+    FAVORITES
 }

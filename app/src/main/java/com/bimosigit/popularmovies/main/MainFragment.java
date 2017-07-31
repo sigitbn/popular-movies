@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import com.bimosigit.popularmovies.R;
 import com.bimosigit.popularmovies.adapter.MovieAdapter;
 import com.bimosigit.popularmovies.detail.DetailActivity;
 import com.bimosigit.popularmovies.model.Movie;
+import com.bimosigit.popularmovies.model.source.local.MoviesContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +71,7 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
 
         setHasOptionsMenu(true);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numberOfColumns());
         mMoviesList.setLayoutManager(gridLayoutManager);
         mMoviesList.setHasFixedSize(true);
         mMoviesList.setAdapter(mAdapter);
@@ -104,12 +106,12 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     @Override
     public void showMovieDetailsUi(Movie movie) {
         Intent intent = new Intent(getContext(), DetailActivity.class);
-        intent.putExtra(Movie.MOVIE_ID, movie.getMovieID());
-        intent.putExtra(Movie.MOVIE_ORIGINAL_TITLE, movie.getOriginalTitle());
-        intent.putExtra(Movie.MOVIE_OVERVIEW, movie.getOverview());
-        intent.putExtra(Movie.MOVIE_POSTER_PATH, movie.getPosterPath());
-        intent.putExtra(Movie.MOVIE_RELEASE_DATE, movie.getReleaseDate());
-        intent.putExtra(Movie.MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
+        intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_ID, movie.getMovieID());
+        intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE, movie.getOriginalTitle());
+        intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
+        intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
+        intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
         startActivity(intent);
     }
 
@@ -142,6 +144,9 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
             case R.id.popular:
                 mPresenter.setFiltering(MovieFilterType.POPULAR_MOVIE);
                 break;
+            case R.id.favorites:
+                mPresenter.setFiltering(MovieFilterType.FAVORITES);
+                break;
         }
         mPresenter.loadMovies();
         return super.onOptionsItemSelected(item);
@@ -151,5 +156,15 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
     }
 }

@@ -18,13 +18,13 @@ public class Movie {
     private String overview;
     private String releaseDate;
 
-    public static final String MOVIE_ID = "id";
-    public static final String MOVIE_VOTE_COUNT = "vote_count";
-    public static final String MOVIE_ORIGINAL_TITLE = "original_title";
-    public static final String MOVIE_OVERVIEW = "overview";
-    public static final String MOVIE_POSTER_PATH="poster_path";
-    public static final String MOVIE_RELEASE_DATE="release_date";
-    public static final String MOVIE_VOTE_AVERAGE="vote_average";
+//    public static final String MOVIE_ID = "id";
+//    public static final String MOVIE_VOTE_COUNT = "vote_count";
+//    public static final String MOVIE_ORIGINAL_TITLE = "original_title";
+//    public static final String MOVIE_OVERVIEW = "overview";
+//    public static final String MOVIE_POSTER_PATH="poster_path";
+//    public static final String MOVIE_RELEASE_DATE="release_date";
+//    public static final String MOVIE_VOTE_AVERAGE="vote_average";
 
 
     public Movie() {

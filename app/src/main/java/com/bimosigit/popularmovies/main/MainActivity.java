@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mainFragment, R.id.content_frame);
         }
 
-        MoviesRepository moviesRepository = new MoviesRepository();
+        MoviesRepository moviesRepository = MoviesRepository.getInstance(getApplicationContext());
         mPresenter = new MainPresenter(mainFragment, moviesRepository);
         if (savedInstanceState != null) {
             MovieFilterType currentFilterType = (MovieFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);

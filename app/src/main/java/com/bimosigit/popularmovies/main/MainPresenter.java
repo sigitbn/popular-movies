@@ -17,7 +17,7 @@ public class MainPresenter implements MainContract.Presenter {
     private MoviesRepository mMoviesRepository;
     private MovieFilterType mCurrentFiltering = MovieFilterType.TOP_RATED;
 
-    public MainPresenter(MainFragment mainFragment, MoviesRepository moviesRepository) {
+    public MainPresenter(MainContract.View mainFragment, MoviesRepository moviesRepository) {
 
         mMoviesRepository = moviesRepository;
         mMoviesView = mainFragment;

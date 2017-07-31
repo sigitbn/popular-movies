@@ -21,4 +21,11 @@ public interface MoviesDataSource {
     }
 
     void fetchMovies(MovieFilterType filterType, @NonNull LoadMoviesCallback callback);
+
+    void addToFavorites(Movie movie);
+
+    void addToFavorites(Integer movieID);
+
+    boolean isFavorites(Integer movieID);
+
 }

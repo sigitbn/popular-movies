@@ -21,9 +21,12 @@ public class NetworkUtils {
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String API_KEY = "api_key";
 
-    public static URL buildURI(String query) {
-        Uri builtURI = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(query)
+    public static URL buildURI(String... queries) {
+        Uri.Builder uriBuilder = Uri.parse(BASE_URL).buildUpon();
+        for (String query : queries) {
+            uriBuilder.appendPath(query);
+        }
+        Uri builtURI = uriBuilder
                 .appendQueryParameter(API_KEY, BuildConfig.TheMovieDbApiKey)
                 .build();
         URL url = null;
