@@ -112,6 +112,14 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
+    public void removeFromFavorites(Integer movieID) {
+        SQLiteDatabase sqLiteDatabase = mDbHelper.getWritableDatabase();
+        sqLiteDatabase.delete(MoviesContract.MovieEntry.TABLE_NAME,
+                MoviesContract.MovieEntry.COLUMN_MOVIE_ID + "=" + movieID, null);
+        sqLiteDatabase.close();
+    }
+
+    @Override
     public boolean isFavorites(Integer movieID) {
         SQLiteDatabase sqLiteDatabase = mDbHelper.getReadableDatabase();
         String sql = "SELECT "

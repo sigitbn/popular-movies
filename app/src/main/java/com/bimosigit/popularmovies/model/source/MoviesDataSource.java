@@ -26,6 +26,8 @@ public interface MoviesDataSource {
 
     void addToFavorites(Integer movieID);
 
+    void removeFromFavorites(Integer movieID);
+
     boolean isFavorites(Integer movieID);
 
 }

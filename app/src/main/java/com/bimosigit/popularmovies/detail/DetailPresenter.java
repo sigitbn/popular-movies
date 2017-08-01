@@ -48,6 +48,7 @@ public class DetailPresenter implements DetailContract.Presenter {
 
     @Override
     public void removeFromFavorites() {
+        mMoviesRepository.removeFromFavorites(mMovie.getMovieID());
     }
 
     @Override
@@ -59,16 +60,6 @@ public class DetailPresenter implements DetailContract.Presenter {
         mView.showMoviePoster(mMovie.getPosterPath());
         mView.setFavorite(mMoviesRepository.isFavorites(mMovie.getMovieID()));
 
-        //        String ratingText = getString(R.string.rating) + movie.getVoteAverage() + "/10";
-//        String releaseText = getString(R.string.release_on) + movie.getReleaseDate();
-//
-//        mOriginalTitleTextView.setText(movie.getOriginalTitle());
-//        mRatingTextView.setText(ratingText);
-//        mOverviewTextView.setText(movie.getOverview());
-//        mReleaseTextView.setText(releaseText);
-//
-//        Uri uri = Uri.parse("http://image.tmdb.org/t/p/w185/" + movie.getPosterPath());
-//        Picasso.with(this).load(uri).into(mPosterImageView);
     }
 
     @Override

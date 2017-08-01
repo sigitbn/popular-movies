@@ -1,6 +1,7 @@
 package com.bimosigit.popularmovies.detail;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -156,7 +157,7 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
     }
 
     @Override
-    public void showTrailerVideos(List<Trailer> trailers) {
+    public void showTrailerVideos(final List<Trailer> trailers) {
         loadingTrailer = false;
         setLoadingIndicator(false);
         int trailerCount = trailers.size();
@@ -165,10 +166,22 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
             switch (i) {
                 case 0:
                     Picasso.with(getActivity()).load(trailers.get(i).getThumnailUrl()).into(mDetailTrailerAImageView);
+                    mDetailTrailerAImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            launchTrailer(trailers.get(0));
+                        }
+                    });
                     break;
 
                 case 1:
                     Picasso.with(getActivity()).load(trailers.get(i).getThumnailUrl()).into(mDetailTrailerBImageView);
+                    mDetailTrailerBImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            launchTrailer(trailers.get(1));
+                        }
+                    });
                     break;
 
                 default:
@@ -204,7 +217,7 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
 
     @Override
     public void launchTrailer(Trailer trailer) {
-
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.youtube_link) + trailer.getKey())));
     }
 
     @Override

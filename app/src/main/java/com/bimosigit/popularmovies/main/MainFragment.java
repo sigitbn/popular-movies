@@ -15,7 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bimosigit.popularmovies.R;
@@ -39,10 +41,15 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
 
     @BindView(R.id.rv_movies)
     RecyclerView mMoviesList;
+
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mProgressBar;
 
     Unbinder unbinder;
+    @BindView(R.id.no_movies_text)
+    TextView noMoviesTextView;
+    @BindView(R.id.no_movies_views)
+    LinearLayout noMoviesViews;
     private MainContract.Presenter mPresenter;
     private ArrayList<Movie> mMovies;
     private MovieAdapter mAdapter;
@@ -98,6 +105,7 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     @Override
     public void showMovies(List<Movie> movies) {
         setLoadingIndicator(false);
+        showEmptyScreen(false, getString(R.string.favorites_is_empty));
         mMovies.clear();
         mMovies.addAll(movies);
         mAdapter.notifyDataSetChanged();
@@ -120,7 +128,25 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
         setLoadingIndicator(false);
         Activity activity = getActivity();
         if (activity != null) {
-            Toast.makeText(activity, R.string.cannot_connect_server, Toast.LENGTH_SHORT).show();
+            if (mPresenter.getFiltering().equals(MovieFilterType.FAVORITES)) {
+                showEmptyScreen(true, getString(R.string.favorites_is_empty));
+                mAdapter.notifyDataSetChanged();
+                Toast.makeText(activity, R.string.favorites_is_empty, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(activity, R.string.cannot_connect_server, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showEmptyScreen(boolean visibility, String message) {
+        if (visibility) {
+            noMoviesTextView.setText(message);
+            noMoviesViews.setVisibility(View.VISIBLE);
+
+            mMoviesList.setVisibility(View.GONE);
+        } else {
+            noMoviesViews.setVisibility(View.GONE);
+            mMoviesList.setVisibility(View.VISIBLE);
         }
     }
 
