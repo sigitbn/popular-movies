@@ -1,4 +1,4 @@
-# Popular Movies
+# Popular Movies Stage 2
 Popular Movies is an app to help users discover popular and recent movies
 
 ## Installation
