@@ -35,9 +35,9 @@ public class DetailContract {
 
     interface Presenter extends BasePresenter {
 
-        void addToFavorites();
+        boolean addToFavorites();
 
-        void removeFromFavorites();
+        boolean removeFromFavorites();
 
         void loadMovie();
 

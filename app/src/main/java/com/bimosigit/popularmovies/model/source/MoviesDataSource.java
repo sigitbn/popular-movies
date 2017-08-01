@@ -22,11 +22,11 @@ public interface MoviesDataSource {
 
     void fetchMovies(MovieFilterType filterType, @NonNull LoadMoviesCallback callback);
 
-    void addToFavorites(Movie movie);
+    boolean addToFavorites(Movie movie);
 
     void addToFavorites(Integer movieID);
 
-    void removeFromFavorites(Integer movieID);
+    boolean removeFromFavorites(Integer movieID);
 
     boolean isFavorites(Integer movieID);
 

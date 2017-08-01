@@ -1,16 +1,16 @@
 package com.bimosigit.popularmovies.model.source;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.bimosigit.popularmovies.main.MovieFilterType;
 import com.bimosigit.popularmovies.model.Movie;
 import com.bimosigit.popularmovies.model.source.local.MoviesContract;
-import com.bimosigit.popularmovies.model.source.local.MoviesDbHelper;
 import com.bimosigit.popularmovies.utilities.NetworkUtils;
 
 import org.json.JSONArray;
@@ -29,14 +29,15 @@ import java.util.List;
 public class MoviesRepository implements MoviesDataSource {
 
     private static MoviesRepository INSTANCE;
+    private ContentResolver contentResolver;
     private LoadMoviesCallback mCallBack;
-    private MoviesDbHelper mDbHelper;
 
-    private MoviesRepository(Context context) {
-        mDbHelper = new MoviesDbHelper(context);
+    private MoviesRepository(@NonNull Context context) {
+        contentResolver = context.getContentResolver();
     }
 
-    public static MoviesRepository getInstance(Context context) {
+    public static MoviesRepository getInstance(@NonNull Context context) {
+
         if (INSTANCE == null) {
             INSTANCE = new MoviesRepository(context);
         }
@@ -46,21 +47,18 @@ public class MoviesRepository implements MoviesDataSource {
     @Override
     public void fetchMovies(MovieFilterType filterType, @NonNull LoadMoviesCallback callback) {
         mCallBack = callback;
-        String query = getQuery(filterType);
-
         if (filterType.equals(MovieFilterType.FAVORITES)) {
             getFavorites();
         } else {
-            URL moviesURL = NetworkUtils.buildURI(query);
-            new MoviesQueryTask().execute(moviesURL);
+            new MoviesQueryTask().execute(filterType);
         }
     }
 
     private void getFavorites() {
-        List<Movie> movies = new ArrayList<Movie>();
-        SQLiteDatabase sqLiteDatabase = mDbHelper.getReadableDatabase();
+        List<Movie> movies = new ArrayList<>();
 
-        Cursor cursor = sqLiteDatabase.query(MoviesContract.MovieEntry.TABLE_NAME, null, null, null, null, null, MoviesContract.MovieEntry.COLUMN_MOVIE_FAVORITE);
+        Cursor cursor = contentResolver.query(MoviesContract.MovieEntry.CONTENT_URI, null, null, null, MoviesContract.MovieEntry.COLUMN_MOVIE_FAVORITE);
+
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 Movie movie = new Movie();
@@ -77,7 +75,6 @@ public class MoviesRepository implements MoviesDataSource {
         if (cursor != null) {
             cursor.close();
         }
-        sqLiteDatabase.close();
 
         if (movies.isEmpty()) {
             mCallBack.onDataNotAvailable();
@@ -89,9 +86,7 @@ public class MoviesRepository implements MoviesDataSource {
 
 
     @Override
-    public void addToFavorites(Movie movie) {
-
-        SQLiteDatabase sqLiteDatabase = mDbHelper.getWritableDatabase();
+    public boolean addToFavorites(Movie movie) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(MoviesContract.MovieEntry.COLUMN_MOVIE_ID, movie.getMovieID());
@@ -102,8 +97,9 @@ public class MoviesRepository implements MoviesDataSource {
         contentValues.put(MoviesContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
         contentValues.put(MoviesContract.MovieEntry.COLUMN_MOVIE_FAVORITE, true);
 
-        sqLiteDatabase.insert(MoviesContract.MovieEntry.TABLE_NAME, null, contentValues);
-        sqLiteDatabase.close();
+        Uri uri = contentResolver.insert(MoviesContract.MovieEntry.CONTENT_URI, contentValues);
+        return uri != null;
+
     }
 
     @Override
@@ -112,26 +108,27 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     @Override
-    public void removeFromFavorites(Integer movieID) {
-        SQLiteDatabase sqLiteDatabase = mDbHelper.getWritableDatabase();
-        sqLiteDatabase.delete(MoviesContract.MovieEntry.TABLE_NAME,
-                MoviesContract.MovieEntry.COLUMN_MOVIE_ID + "=" + movieID, null);
-        sqLiteDatabase.close();
+    public boolean removeFromFavorites(Integer movieID) {
+
+        Uri uri = MoviesContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(String.valueOf(movieID)).build();
+
+        int deleteRow = contentResolver.delete(uri, null, null);
+
+        return deleteRow > 0;
     }
 
     @Override
     public boolean isFavorites(Integer movieID) {
-        SQLiteDatabase sqLiteDatabase = mDbHelper.getReadableDatabase();
-        String sql = "SELECT "
-                + MoviesContract.MovieEntry.COLUMN_MOVIE_ID + " FROM "
-                + MoviesContract.MovieEntry.TABLE_NAME + " WHERE "
-                + MoviesContract.MovieEntry.COLUMN_MOVIE_ID + "="
-                + movieID;
-        Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
-        boolean favorite = cursor.getCount() > 0;
+
+        Uri uri = MoviesContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(String.valueOf(movieID)).build();
+
+        Cursor cursor = contentResolver.query(uri, null, null, null, MoviesContract.MovieEntry.COLUMN_MOVIE_FAVORITE);
+
         cursor.close();
 
-        return favorite;
+        return cursor.getCount() > 0;
     }
 
     private String getQuery(MovieFilterType filterType) {
@@ -145,24 +142,31 @@ public class MoviesRepository implements MoviesDataSource {
         }
     }
 
-    private class MoviesQueryTask extends AsyncTask<URL, Void, String> {
+    private class MoviesQueryTask extends AsyncTask<MovieFilterType, Void, String> {
 
         @Override
-        protected String doInBackground(URL... urls) {
-            URL moviesUrl = urls[0];
+        protected String doInBackground(MovieFilterType... filterTypes) {
+            MovieFilterType filterType = filterTypes[0];
             String response = null;
-            try {
-                response = NetworkUtils.getResponseFromHttpUrl(moviesUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (filterType.equals(MovieFilterType.FAVORITES)) {
+                getFavorites();
+                response = "Done";
+            } else {
+                URL moviesURL = NetworkUtils.buildURI(getQuery(filterType));
+                try {
+                    response = NetworkUtils.getResponseFromHttpUrl(moviesURL);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
             return response;
         }
 
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            List<Movie> movies = new ArrayList<Movie>();
+            List<Movie> movies = new ArrayList<>();
             if (response != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -180,10 +184,11 @@ public class MoviesRepository implements MoviesDataSource {
 
                         movies.add(movie);
                     }
+                    mCallBack.onMoviesLoaded(movies);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mCallBack.onMoviesLoaded(movies);
+
             } else {
                 mCallBack.onDataNotAvailable();
             }

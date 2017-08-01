@@ -50,7 +50,7 @@ public class ReviewsRepository implements ReviewsDataSource {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            List<Review> reviews = new ArrayList<Review>();
+            List<Review> reviews = new ArrayList<>();
             if (response != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);

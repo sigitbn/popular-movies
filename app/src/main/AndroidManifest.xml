@@ -28,9 +28,12 @@
         <activity
             android:name=".detail.DetailActivity"
             android:label="Movie Detail" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+
+        <provider
+            android:name=".model.source.local.MoviesContentProvider"
+            android:authorities="com.bimosigit.popularmovies"
+            android:exported="false" />
+
     </application>
 
 </manifest>

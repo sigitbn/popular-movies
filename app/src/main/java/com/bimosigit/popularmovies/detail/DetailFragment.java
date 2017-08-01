@@ -235,8 +235,9 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if (isChecked) {
+            if(mPresenter.addToFavorites())
             Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-            mPresenter.addToFavorites();
+
         } else {
             Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
             mPresenter.removeFromFavorites();

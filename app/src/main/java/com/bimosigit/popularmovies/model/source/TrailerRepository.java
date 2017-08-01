@@ -50,7 +50,7 @@ public class TrailerRepository implements TrailerDataSource {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            List<Trailer> trailers = new ArrayList<Trailer>();
+            List<Trailer> trailers = new ArrayList<>();
             if (response != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);

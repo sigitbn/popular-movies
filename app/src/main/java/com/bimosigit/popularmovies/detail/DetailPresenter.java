@@ -42,13 +42,13 @@ public class DetailPresenter implements DetailContract.Presenter {
     }
 
     @Override
-    public void addToFavorites() {
-        mMoviesRepository.addToFavorites(mMovie);
+    public boolean addToFavorites() {
+        return mMoviesRepository.addToFavorites(mMovie);
     }
 
     @Override
-    public void removeFromFavorites() {
-        mMoviesRepository.removeFromFavorites(mMovie.getMovieID());
+    public boolean removeFromFavorites() {
+        return mMoviesRepository.removeFromFavorites(mMovie.getMovieID());
     }
 
     @Override
