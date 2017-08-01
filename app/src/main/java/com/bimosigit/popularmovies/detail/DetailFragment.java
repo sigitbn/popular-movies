@@ -19,8 +19,10 @@ import android.widget.ToggleButton;
 import com.bimosigit.popularmovies.R;
 import com.bimosigit.popularmovies.model.Review;
 import com.bimosigit.popularmovies.model.Trailer;
+import com.bimosigit.popularmovies.model.source.local.MoviesContract;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -186,6 +188,15 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
 
                 default:
                     mDetailShowMoreTrailerButton.setVisibility(View.VISIBLE);
+                    mDetailShowMoreTrailerButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getContext(), TrailerListActivity.class);
+                            intent.putExtra(getString(R.string.trailer_list_extra), (ArrayList<Trailer>) trailers);
+                            intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE, mOriginalTitleTextView.getText().toString());
+                            getActivity().startActivity(intent);
+                        }
+                    });
                     break;
             }
         }
@@ -193,7 +204,7 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
     }
 
     @Override
-    public void showUserReviews(List<Review> reviews) {
+    public void showUserReviews(final List<Review> reviews) {
         loadingReviews = false;
         setLoadingIndicator(false);
         int reviewCount = reviews.size();
@@ -210,6 +221,15 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
                     break;
                 default:
                     mDetailShowMoreReviewButton.setVisibility(View.VISIBLE);
+                    mDetailShowMoreReviewButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getContext(), ReviewListActivity.class);
+                            intent.putExtra(getString(R.string.review_list_extra), (ArrayList<Review>) reviews);
+                            intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE, mOriginalTitleTextView.getText().toString());
+                            getActivity().startActivity(intent);
+                        }
+                    });
                     break;
             }
         }
@@ -235,8 +255,8 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if (isChecked) {
-            if(mPresenter.addToFavorites())
-            Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+            if (mPresenter.addToFavorites())
+                Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
 
         } else {
             Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();

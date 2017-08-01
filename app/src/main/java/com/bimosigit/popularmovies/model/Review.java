@@ -1,10 +1,12 @@
 package com.bimosigit.popularmovies.model;
 
+import java.io.Serializable;
+
 /**
  * Created by sigitbn on 6/14/17.
  */
 
-public class Review {
+public class Review implements Serializable {
 
     private String id;
     private String author;

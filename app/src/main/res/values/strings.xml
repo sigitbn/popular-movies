@@ -29,4 +29,7 @@
     <string name="show_more">Show More</string>
     <string name="favorites_is_empty">Favorites list is empty</string>
     <string name="youtube_link" translatable="false">https://www.youtube.com/watch?v=</string>
+    <string name="review_list_extra">ReviewListExtra</string>
+    <string name="trailer_list_extra">TrailerListExtra</string>
+    <string name="movie_trailer">Movie Trailer</string>
 </resources>

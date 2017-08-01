@@ -34,6 +34,11 @@
             android:authorities="com.bimosigit.popularmovies"
             android:exported="false" />
 
+        <activity
+            android:name=".detail.ReviewListActivity"
+            android:label="Reviews" />
+        <activity android:name=".detail.TrailerListActivity"
+            android:label="Trailer"/>
     </application>
 
 </manifest>

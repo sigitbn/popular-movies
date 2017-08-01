@@ -1,10 +1,12 @@
 package com.bimosigit.popularmovies.model;
 
+import java.io.Serializable;
+
 /**
  * Created by sigitbn on 7/30/17.
  */
 
-public class Trailer {
+public class Trailer implements Serializable{
 
     private String key;
     private String site;

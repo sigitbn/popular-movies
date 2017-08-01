@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +24,7 @@ import com.bimosigit.popularmovies.adapter.MovieAdapter;
 import com.bimosigit.popularmovies.detail.DetailActivity;
 import com.bimosigit.popularmovies.model.Movie;
 import com.bimosigit.popularmovies.model.source.local.MoviesContract;
+import com.bimosigit.popularmovies.utilities.ScreenUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,7 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
     TextView noMoviesTextView;
     @BindView(R.id.no_movies_views)
     LinearLayout noMoviesViews;
+
     private MainContract.Presenter mPresenter;
     private ArrayList<Movie> mMovies;
     private MovieAdapter mAdapter;
@@ -78,7 +79,7 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
 
         setHasOptionsMenu(true);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numberOfColumns());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), ScreenUtils.numberOfColumns(getActivity()));
         mMoviesList.setLayoutManager(gridLayoutManager);
         mMoviesList.setHasFixedSize(true);
         mMoviesList.setAdapter(mAdapter);
@@ -184,13 +185,4 @@ public class MainFragment extends Fragment implements MainContract.View, MovieAd
         unbinder.unbind();
     }
 
-    private int numberOfColumns() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int widthDivider = 400;
-        int width = displayMetrics.widthPixels;
-        int nColumns = width / widthDivider;
-        if (nColumns < 2) return 2;
-        return nColumns;
-    }
 }
