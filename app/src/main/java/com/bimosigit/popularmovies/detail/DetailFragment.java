@@ -32,12 +32,13 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment implements DetailContract.View, CompoundButton.OnCheckedChangeListener {
+public class DetailFragment extends Fragment implements DetailContract.View,
+        CompoundButton.OnCheckedChangeListener {
 
     @BindView(R.id.iv_poster)
     ImageView mPosterImageView;
 
-    @BindView(R.id.pb_loading_indicator)
+    @BindView(R.id.pb_loading_detail_indicator)
     ProgressBar mProgressBar;
 
     @BindView(R.id.tv_original_title)
@@ -118,15 +119,23 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        setLoadingIndicator(false);
+    }
+
+    @Override
     public void setPresenter(DetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
     @Override
     public void setLoadingIndicator(boolean active) {
+
         if (loadingMovies || loadingReviews || loadingTrailer) {
             active = true;
         }
+
         mProgressBar.setVisibility(active ? View.VISIBLE : View.INVISIBLE);
     }
 
@@ -151,6 +160,7 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
     public void showVoteAverage(Double voteAverage) {
         String ratingText = getString(R.string.rating) + voteAverage + "/10";
         mRatingTextView.setText(ratingText);
+
     }
 
     @Override
@@ -167,7 +177,8 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
         for (int i = 0; i < trailerCount; i++) {
             switch (i) {
                 case 0:
-                    Picasso.with(getActivity()).load(trailers.get(i).getThumnailUrl()).into(mDetailTrailerAImageView);
+                    Picasso.with(getActivity()).load(trailers.get(i).getThumnailUrl())
+                            .into(mDetailTrailerAImageView);
                     mDetailTrailerAImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -177,7 +188,8 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
                     break;
 
                 case 1:
-                    Picasso.with(getActivity()).load(trailers.get(i).getThumnailUrl()).into(mDetailTrailerBImageView);
+                    Picasso.with(getActivity()).load(trailers.get(i).getThumnailUrl())
+                            .into(mDetailTrailerBImageView);
                     mDetailTrailerBImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -193,7 +205,9 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
                         public void onClick(View view) {
                             Intent intent = new Intent(getContext(), TrailerListActivity.class);
                             intent.putExtra(getString(R.string.trailer_list_extra), (ArrayList<Trailer>) trailers);
-                            intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE, mOriginalTitleTextView.getText().toString());
+                            intent.putExtra(
+                                    MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE,
+                                    mOriginalTitleTextView.getText().toString());
                             getActivity().startActivity(intent);
                         }
                     });
@@ -226,7 +240,9 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
                         public void onClick(View view) {
                             Intent intent = new Intent(getContext(), ReviewListActivity.class);
                             intent.putExtra(getString(R.string.review_list_extra), (ArrayList<Review>) reviews);
-                            intent.putExtra(MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE, mOriginalTitleTextView.getText().toString());
+                            intent.putExtra(
+                                    MoviesContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE,
+                                    mOriginalTitleTextView.getText().toString());
                             getActivity().startActivity(intent);
                         }
                     });
@@ -237,7 +253,8 @@ public class DetailFragment extends Fragment implements DetailContract.View, Com
 
     @Override
     public void launchTrailer(Trailer trailer) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.youtube_link) + trailer.getKey())));
+        startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse(getString(R.string.youtube_link) + trailer.getKey())));
     }
 
     @Override

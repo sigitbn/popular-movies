@@ -10,30 +10,35 @@ import com.bimosigit.popularmovies.utilities.ActivityUtils;
 public class MainActivity extends AppCompatActivity {
 
     private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
+    private static final String MAIN_FRAGMENT = "MAIN_FRAGMENT";
     private MainPresenter mPresenter;
+    private MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (mainFragment == null) {
+        mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        MovieFilterType currentFilterType = MovieFilterType.POPULAR_MOVIE;
+        if (savedInstanceState != null) {
+            currentFilterType = (MovieFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
+            mainFragment = (MainFragment) getSupportFragmentManager().getFragment(savedInstanceState, MAIN_FRAGMENT);
+        } else {
             mainFragment = MainFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mainFragment, R.id.content_frame);
         }
 
         MoviesRepository moviesRepository = MoviesRepository.getInstance(getApplicationContext());
         mPresenter = new MainPresenter(mainFragment, moviesRepository);
-        if (savedInstanceState != null) {
-            MovieFilterType currentFilterType = (MovieFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
-            mPresenter.setFiltering(currentFilterType);
-        }
+        mPresenter.setFiltering(currentFilterType);
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(CURRENT_FILTERING_KEY, mPresenter.getFiltering());
         super.onSaveInstanceState(outState);
+        outState.putSerializable(CURRENT_FILTERING_KEY, mPresenter.getFiltering());
+        getSupportFragmentManager().putFragment(outState, MAIN_FRAGMENT, mainFragment);
     }
 }

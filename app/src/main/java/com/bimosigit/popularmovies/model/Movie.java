@@ -1,10 +1,12 @@
 package com.bimosigit.popularmovies.model;
 
+import java.io.Serializable;
+
 /**
  * Created by sigitbn on 6/14/17.
  */
 
-public class Movie {
+public class Movie implements Serializable{
     private Integer movieID;
     private Integer voteCount;
     private Boolean video;
